@@ -1,15 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define N 80
 // declaro el procedimiento, siempre se hace la declaración arriba y abajo desarrollo el procedimiento o función
 void mostrarPersonas(char **nombre);
-void buscarNombrePorID(int ID, char ** nombres);
+void buscarNombrePorID(int ID, char **nombres);
 int buscarNombrePorPalabra(char *palabraClave, char **nombres);
 int main()
 {
     char *nombre;   // esto no tiene que tener [] porque para eso despues reservo memoria, este solo guarda un nombre
     char **nombres; // es un puntero que apunta a otro puntero (arreglo de punteros) este va a contener los 5 nombres
-    char buffer[100];
+    char buffer[N], palabraClave[N];
+    int ID;
     nombres = (char **)malloc(5 * sizeof(char *)); // va apuntar a 5 direcciones de memoria del tipo char
     for (int i = 0; i < 5; i++)
     {
@@ -21,27 +23,40 @@ int main()
         nombres[i] = nombre;                              // guardo el nombre
     }
     mostrarPersonas(nombres);
-    char palabraClave[100];
-    printf("Ingrese la palabra clave: ");
-    scanf("%s", palabraClave);
-    int resultado = buscarNombrePorPalabra(palabraClave, nombres);
-    if (resultado != -1)
+    int opcion;
+    printf("Si desea buscar por ID ingrese opcion 1 o si quiere por Palabra ingrese opcion 2: ");
+    scanf("%d", &opcion);
+    switch (opcion)
     {
-        printf("La palabra que buscabas es: %s", nombres[resultado]);
-    }else
-    {
-        printf("No se encontro nada");
+    case 1:
+        printf("Ingrese el ID de la persona que desea buscar: ");
+        scanf("%d", &ID);
+        buscarNombrePorID(ID, nombres);
+        break;
+    case 2:
+        printf("Ingrese la palabra clave: ");
+        scanf("%s", palabraClave);
+        int resultado = buscarNombrePorPalabra(palabraClave, nombres);
+        if (resultado != -1)
+        {
+            printf("La palabra que buscabas es: %s", nombres[resultado]);
+        }
+        else
+        {
+            printf("No se encontro nada");
+        }
+
+        break;
+    default:
+        printf("Opción no válida.\n");
+        break;
     }
-    
-    int ID;
-    printf("Ingrese el ID de la persona que desea buscar: ");
-    scanf("%d", &ID);
-    buscarNombrePorID(ID, nombres);
+
     for (int i = 0; i < 5; i++) // aca libero el espacio de cada nombre
-    {      
+    {
         free(nombres[i]);
     }
-    free(nombres); // y aca el del bloque completo 
+    free(nombres); // y aca el del bloque completo
     return 0;
 }
 // defino el procedimiento
@@ -52,19 +67,17 @@ void mostrarPersonas(char **nombres)
         printf("Nombre %d: %s\n", i + 1, nombres[i]);
     }
 }
-void buscarNombrePorID(int ID, char **nombres){
-    if ((ID >= 1) && (ID<=5)  )
+void buscarNombrePorID(int ID, char **nombres)
+{
+    if ((ID >= 1) && (ID <= 5))
     {
-                printf("Nombre %d: %s\n",ID, nombres[ID-1]);
-    }else
+        printf("Nombre %d: %s\n", ID, nombres[ID - 1]);
+    }
+    else
     {
         printf("No se encontró el valor buscado, ingrese otro");
     }
-    
-    
 }
-
-
 
 int buscarNombrePorPalabra(char *palabraClave, char **nombres) // NO TE OLVIDES DEL * EN PALABRA CLAVE O EN LOS ARREGLOS CUANDO PASAS ARREGLOS PORQUE SINO NO PUEDE LEER NI HACER NADA Y SE PRODUCE UN SEGMENTATION FAULT
 {
