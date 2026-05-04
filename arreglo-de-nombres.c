@@ -3,7 +3,8 @@
 #include <string.h>
 // declaro el procedimiento, siempre se hace la declaración arriba y abajo desarrollo el procedimiento o función
 void mostrarPersonas(char **nombre);
-int buscarNombre(char *palabraClave, char **nombres);
+void buscarNombrePorID(int ID, char ** nombres);
+int buscarNombrePorPalabra(char *palabraClave, char **nombres);
 int main()
 {
     char *nombre;   // esto no tiene que tener [] porque para eso despues reservo memoria, este solo guarda un nombre
@@ -23,7 +24,7 @@ int main()
     char palabraClave[100];
     printf("Ingrese la palabra clave: ");
     scanf("%s", palabraClave);
-    int resultado = buscarNombre(palabraClave, nombres);
+    int resultado = buscarNombrePorPalabra(palabraClave, nombres);
     if (resultado != -1)
     {
         printf("La palabra que buscabas es: %s", nombres[resultado]);
@@ -32,12 +33,15 @@ int main()
         printf("No se encontro nada");
     }
     
-    
+    int ID;
+    printf("Ingrese el ID de la persona que desea buscar: ");
+    scanf("%d", &ID);
+    buscarNombrePorID(ID, nombres);
     for (int i = 0; i < 5; i++) // aca libero el espacio de cada nombre
-    {
+    {      
         free(nombres[i]);
     }
-    free(nombres); // y aca el del bloque completo
+    free(nombres); // y aca el del bloque completo 
     return 0;
 }
 // defino el procedimiento
@@ -48,8 +52,21 @@ void mostrarPersonas(char **nombres)
         printf("Nombre %d: %s\n", i + 1, nombres[i]);
     }
 }
+void buscarNombrePorID(int ID, char **nombres){
+    if ((ID >= 1) && (ID<=5)  )
+    {
+                printf("Nombre %d: %s\n",ID, nombres[ID-1]);
+    }else
+    {
+        printf("No se encontró el valor buscado, ingrese otro");
+    }
+    
+    
+}
 
-int buscarNombre(char *palabraClave, char **nombres) // NO TE OLVIDES DEL * EN PALABRA CLAVE O EN LOS ARREGLOS CUANDO PASAS ARREGLOS PORQUE SINO NO PUEDE LEER NI HACER NADA Y SE PRODUCE UN SEGMENTATION FAULT
+
+
+int buscarNombrePorPalabra(char *palabraClave, char **nombres) // NO TE OLVIDES DEL * EN PALABRA CLAVE O EN LOS ARREGLOS CUANDO PASAS ARREGLOS PORQUE SINO NO PUEDE LEER NI HACER NADA Y SE PRODUCE UN SEGMENTATION FAULT
 {
     for (int i = 0; i < 5; i++)
     {
