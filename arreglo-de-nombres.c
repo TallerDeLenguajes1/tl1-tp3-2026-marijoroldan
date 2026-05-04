@@ -20,6 +20,11 @@ int main()
         nombres [i] = nombre; // guardo el nombre
     }
     mostrarPersonas(nombres);
+    for (int i = 0; i < 5; i++) // aca libero el espacio de cada nombre
+    {      
+        free(nombres[i]);
+    }
+    free(nombres); // y aca el del bloque completo 
     return 0;
 }
 // defino el procedimiento
