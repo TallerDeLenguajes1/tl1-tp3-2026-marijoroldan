@@ -3,7 +3,7 @@
 #include <string.h>
 // declaro el procedimiento, siempre se hace la declaración arriba y abajo desarrollo el procedimiento o función
 void mostrarPersonas(char **nombre);
-
+void buscarNombre(int ID);
 int main()
 {
     char *nombre; // esto no tiene que tener [] porque para eso despues reservo memoria, este solo guarda un nombre
@@ -20,6 +20,10 @@ int main()
         nombres [i] = nombre; // guardo el nombre
     }
     mostrarPersonas(nombres);
+    int ID;
+    printf("Ingrese el ID de la persona que desea buscar: ");
+    scanf("%d", &ID);
+    buscarNombre(ID);
     return 0;
 }
 // defino el procedimiento
@@ -29,3 +33,11 @@ void mostrarPersonas(char **nombres){ //si no pongo ** no me va a mostrar nada
         printf("Nombre %d: %s\n", i + 1, nombres[i]);
     }
 }
+void buscarNombre(int ID){
+
+}
+
+
+//estyp en la ramambusca nombre
+
+//no uiero ver este cambio en el main
