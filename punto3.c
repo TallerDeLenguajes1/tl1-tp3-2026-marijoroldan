@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h> // ACORDATE QUE ESTA LIBRERIA TENES QUE PONER PARA EL SRAND, MALLOC y free
 #include <time.h>
 
 char *TiposProductos[] = {"Galletas", "Snack", "Cigarrillos", "Caramelos", "Bebidas"};
@@ -25,15 +26,17 @@ typedef struct
 } Cliente;
 // ------------------------------------ FUNCIONES ---------------------------------------
 float costoTotalProducto(Producto p);
+void mostrarListaDeClientes(Cliente *listaClientes, int cantClientes);
 // ------------------------------------ ACA EMPIEZA EL MAIN --------------------------------
 
 int main() // Cada preventista puede visitar hasta 5 clientes, los cuales por cuestiones operativas solo puede pedir hasta 10 productos.
 {
     int cantClientes;
+    float totalPorProducto;
     char buffer[100];
     srand(time(NULL));
     printf("Ingrese la cantidad de clientes: ");
-    scanf("%d", cantClientes);
+    scanf("%d", &cantClientes);
     Cliente *listaClientes = (Cliente *)malloc(cantClientes * sizeof(Cliente)); // necesito un puntero para cargar los datos de todos los clientes
     for (int i = 0; i < cantClientes; i++)
     {
@@ -54,13 +57,14 @@ int main() // Cada preventista puede visitar hasta 5 clientes, los cuales por cu
             listaClientes[i].Productos[j].Cantidad = rand() % 10 + 1;                 // 1 a 10
             listaClientes[i].Productos[j].TipoProducto = TiposProductos[rand() % 5];  // ya esta definido los tipos de procutos con los cuales va a trabajar el usuario
             listaClientes[i].Productos[j].PrecioUnitario = (float)(rand() % 91 + 10); // 10 a 100
-            // El símbolo '&' obtiene la dirección de memoria
-        // float total = costoTotalProducto(&listaClientes[i].Productos[j]); esto seria asi con punteros
-        // El símbolo '&' obtiene la dirección de memoria
-        float total = costoTotalProducto(listaClientes[i].Productos[j]); // ahora es sin punteros
+            
         }
     }
-    
+    mostrarListaDeClientes(listaClientes, cantClientes);
+    for (int i = 0; i < cantClientes; i++)
+    {
+        free(listaClientes[i].NombreCliente);
+    }
     free(listaClientes);
     return 0;
 }
@@ -74,3 +78,27 @@ float costoTotalProducto(Producto p)
 // float costoTotalProducto(Producto *p){ // hago pasaje por referencia
 //    return p->Cantidad*p->PrecioUnitario;
 // }
+
+void mostrarListaDeClientes(Cliente *listaClientes, int cantClientes)
+{
+    for (int i = 0; i < cantClientes; i++)
+    {
+        float costoTotal = 0;
+        printf("\n-----------------------------------------------------------------");
+        printf("\nID del cliente: %d", listaClientes[i].ClienteID);
+        printf("\nNombre del cliente: %s", listaClientes[i].NombreCliente);
+        printf("\nCantidad de Productos a pedir: %d", listaClientes[i].CantidadProductosAPedir);
+       for (int j = 0; j< listaClientes[i].CantidadProductosAPedir; j++)
+       {
+        printf("\n********************************************");
+           printf("\nID del producto: %d", listaClientes[i].Productos[j].ProductoID);
+           printf("\nCantidad: %d", listaClientes[i].Productos[j].Cantidad);
+           printf("\nTipo de producto: %s", listaClientes[i].Productos[j].TipoProducto);
+           printf("\nPrecio unitario: %.2f", listaClientes[i].Productos[j].PrecioUnitario);
+           float totalPorProducto = costoTotalProducto(listaClientes[i].Productos[j]); // ahora es sin punteros
+           costoTotal +=totalPorProducto;
+           printf("\nCosto total por producto: %.2f", totalPorProducto);
+    }
+        printf("\nEl total a pagar por los productos es: %.2f", costoTotal);
+    }
+}
